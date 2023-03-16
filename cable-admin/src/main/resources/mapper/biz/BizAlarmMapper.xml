@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.BizAlarmMapper">
+
+    <resultMap type="BizAlarm" id="BizAlarmResult">
+        <result property="alarmId"    column="alarm_id"    />
+        <result property="cameraId"    column="camera_id"    />
+        <result property="deviceId"    column="device_id"    />
+        <result property="lon"    column="lon"    />
+        <result property="lat"    column="lat"    />
+        <result property="eventType"    column="event_type"    />
+        <result property="eventTarget"    column="event_target"    />
+        <result property="imgBase64"    column="img_base64"    />
+        <result property="status"    column="status"    />
+        <result property="timeStamp"    column="time_stamp"    />
+        <result property="alertDesc"    column="alert_desc"    />
+        <result property="alertLevelName"    column="alert_level_name"    />
+    </resultMap>
+
+    <sql id="selectBizAlarmVo">
+        select alarm_id, camera_id, device_id, lon, lat, event_type, event_target, status, time_stamp,img_base64,alert_desc,alert_level_name from biz_alarm
+    </sql>
+
+    <sql id="selectSingleBizAlarmVo">
+        select alarm_id, camera_id, device_id, lon, lat, event_type, event_target, img_base64, status, time_stamp,alert_desc,alert_level_name from biz_alarm
+    </sql>
+
+    <select id="selectAlarmIdListByCameraId" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select alarm_id from biz_alarm
+        where camera_id = #{cameraId} order by time_stamp asc
+    </select>
+
+    <select id="selectBizAlarmList" parameterType="BizAlarm" resultMap="BizAlarmResult">
+        <include refid="selectBizAlarmVo"/>
+        <where>
+            <if test="cameraId != null "> and camera_id = #{cameraId}</if>
+            <if test="deviceId != null  and deviceId != ''"> and device_id = #{deviceId}</if>
+            <if test="lon != null "> and lon = #{lon}</if>
+            <if test="lat != null "> and lat = #{lat}</if>
+            <if test="eventType != null  and eventType != ''"> and event_type = #{eventType}</if>
+            <if test="eventTarget != null  and eventTarget != ''"> and event_target = #{eventTarget}</if>
+            <if test="imgBase64 != null  and imgBase64 != ''"> and img_base64 = #{imgBase64}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="timeStamp != null "> and time_stamp = #{timeStamp} </if>
+            <if test="alertDesc != null "> and alert_desc = #{alertDesc} </if>
+            <if test="alertLevelName != null "> and alert_level_name = #{alertLevelName} </if>
+        </where>
+        order by time_stamp desc
+    </select>
+
+    <select id="selectBizAlarmByAlarmId" parameterType="Long" resultMap="BizAlarmResult">
+        <include refid="selectSingleBizAlarmVo"/>
+        where alarm_id = #{alarmId}
+    </select>
+
+    <insert id="insertBizAlarm" parameterType="BizAlarm" useGeneratedKeys="true" keyProperty="alarmId">
+        insert into biz_alarm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cameraId != null">camera_id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="lon != null">lon,</if>
+            <if test="lat != null">lat,</if>
+            <if test="eventType != null">event_type,</if>
+            <if test="eventTarget != null">event_target,</if>
+            <if test="imgBase64 != null">img_base64,</if>
+            <if test="status != null">status,</if>
+            <if test="timeStamp != null">time_stamp,</if>
+            <if test="alertDesc != null">alert_desc,</if>
+            <if test="alertLevelName != null">alert_level_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cameraId != null">#{cameraId},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="eventType != null">#{eventType},</if>
+            <if test="eventTarget != null">#{eventTarget},</if>
+            <if test="imgBase64 != null">#{imgBase64},</if>
+            <if test="status != null">#{status},</if>
+            <if test="timeStamp != null">#{timeStamp},</if>
+            <if test="alertDesc != null">#{alertDesc},</if>
+            <if test="alertLevelName != null">#{alertLevelName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizAlarm" parameterType="BizAlarm">
+        update biz_alarm
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cameraId != null">camera_id = #{cameraId},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="eventType != null">event_type = #{eventType},</if>
+            <if test="eventTarget != null">event_target = #{eventTarget},</if>
+            <if test="imgBase64 != null">img_base64 = #{imgBase64},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="timeStamp != null">time_stamp = #{timeStamp},</if>
+            <if test="alertDesc != null">alert_desc = #{alertDesc},</if>
+            <if test="alertLevelName != null">alert_level_name = #{alertLevelName},</if>
+        </trim>
+        where alarm_id = #{alarmId}
+    </update>
+
+    <delete id="deleteBizAlarmByAlarmId" parameterType="Long">
+        delete from biz_alarm where alarm_id = #{alarmId}
+    </delete>
+
+    <delete id="deleteBizAlarmByAlarmIds" parameterType="String">
+        delete from biz_alarm where alarm_id in
+        <foreach item="alarmId" collection="array" open="(" separator="," close=")">
+            #{alarmId}
+        </foreach>
+    </delete>
+
+    <select id="statistics" resultType="java.util.Map">
+        select sum(1) as all_count,time_stamp from (
+           select DATE_FORMAT(time_stamp,'%m-%d') as time_stamp from biz_alarm
+           where time_stamp >= #{startTime} and time_stamp &lt; #{endTime}
+          ) t
+        group by time_stamp
+    </select>
+    <select id="listNear" resultType="cn.yhjz.biz.vo.BizAlarmVo">
+        select alarm.*,bz.cable_name from biz_alarm alarm
+      inner join biz_camera bc on alarm.camera_id = bc.id
+      inner join biz_cable bz on bz.id=bc.cable_id
+        order by time_stamp desc
+            limit 50
+    </select>
+
+    <select id="listAfter" resultType="cn.yhjz.biz.vo.BizAlarmVo">
+        select alarm.*,bz.cable_name from biz_alarm alarm
+      inner join biz_camera bc on alarm.camera_id = bc.id
+      inner join biz_cable bz on bz.id=bc.cable_id
+      where alarm.time_stamp > #{time}
+        order by time_stamp desc
+    </select>
+</mapper>

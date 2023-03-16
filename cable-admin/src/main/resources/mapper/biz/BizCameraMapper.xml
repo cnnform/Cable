@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.BizCameraMapper">
+
+    <resultMap type="cn.yhjz.biz.domain.BizCamera" id="BizCameraResult">
+        <result property="id"    column="id"    />
+        <result property="deviceId"    column="device_id"    />
+        <result property="deviceModel"    column="device_model"    />
+        <result property="networkArea"    column="network_area"    />
+        <result property="deviceIp"    column="device_ip"    />
+        <result property="userName"    column="user_name"    />
+        <result property="password"    column="password"    />
+        <result property="port"    column="port"    />
+        <result property="channel"    column="channel"    />
+        <result property="arrow"    column="arrow"    />
+        <result property="vertical"    column="vertical"    />
+        <result property="level"    column="level"    />
+        <result property="viewAngle"    column="view_angle"    />
+        <result property="viewRange"    column="view_range"    />
+        <result property="ptzTiltpos"    column="ptz_tiltpos"    />
+        <result property="ptzPanpos"    column="ptz_panpos"    />
+        <result property="ptzZoompos"    column="ptz_zoompos"    />
+        <result property="ptzAngle"    column="ptz_angle"    />
+        <result property="lon"    column="lon"    />
+        <result property="lat"    column="lat"    />
+        <result property="height"    column="height"    />
+        <result property="altitude"    column="altitude"    />
+        <result property="description"    column="description"    />
+        <result property="notes"    column="notes"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="alertRegions"    column="alert_regions"    />
+        <result property="cableId"    column="cable_id"    />
+        <result property="jslGuid"    column="jsl_guid"    />
+        <result property="jslClientSecret"    column="jsl_client_secret"    />
+        <result property="jslClientId"    column="jsl_client_id"    />
+        <result property="jslUsername"    column="jsl_username"    />
+        <result property="jslPassword"    column="jsl_password"/>
+        <result property="jslRtsp"    column="jsl_rtsp"/>
+    </resultMap>
+
+    <sql id="selectBizCameraVo">
+        select id, device_id, device_model, network_area, device_ip, user_name, password, port, channel, arrow, vertical, level, view_angle, view_range, ptz_tiltpos, ptz_panpos, ptz_zoompos, ptz_angle, lon, lat, height, altitude, description, notes, status, create_by, create_time, update_by, update_time, alert_regions, cable_id, jsl_guid, jsl_client_secret, jsl_client_id, jsl_username, jsl_password,jsl_rtsp from biz_camera
+    </sql>
+
+    <select id="selectBizCameraList" parameterType="cn.yhjz.biz.domain.BizCamera" resultType="cn.yhjz.biz.vo.BizCameraVo">
+        select camera.id, camera.device_id, camera.device_model, camera.network_area, camera.device_ip, camera.user_name, camera.password, camera.port, camera.channel, camera.arrow, camera.vertical, camera.level, camera.view_angle, camera.view_range, camera.ptz_tiltpos, camera.ptz_panpos, camera.ptz_zoompos, camera.ptz_angle, camera.lon, camera.lat, camera.height, camera.altitude, camera.description, camera.notes, camera.status, camera.create_by, camera.create_time, camera.update_by, camera.update_time,camera.alert_regions,camera.cable_id,
+        camera.jsl_guid, camera.jsl_client_secret, camera.jsl_client_id, camera.jsl_username, camera.jsl_password ,camera.jsl_rtsp,
+        c.cable_name as cable_name
+        from biz_camera camera
+        left join biz_cable  c on c.id= camera.cable_id
+        <where>
+            <if test="deviceId != null  and deviceId != ''"> and camera.device_id = #{deviceId}</if>
+            <if test="deviceModel != null  and deviceModel != ''"> and camera.device_model = #{deviceModel}</if>
+            <if test="networkArea != null  and networkArea != ''"> and camera.network_area = #{networkArea}</if>
+            <if test="deviceIp != null  and deviceIp != ''"> and camera.device_ip = #{deviceIp}</if>
+            <if test="userName != null  and userName != ''"> and camera.user_name like concat('%', #{userName}, '%')</if>
+            <if test="password != null  and password != ''"> and camera.password = #{password}</if>
+            <if test="port != null  and port != ''"> and camera.port = #{port}</if>
+            <if test="channel != null  and channel != ''"> and camera.channel = #{channel}</if>
+            <if test="arrow != null "> and camera.arrow = #{arrow}</if>
+            <if test="vertical != null "> and camera.vertical = #{vertical}</if>
+            <if test="level != null "> and camera.level = #{level}</if>
+            <if test="viewAngle != null "> and camera.view_angle = #{viewAngle}</if>
+            <if test="viewRange != null "> and camera.view_range = #{viewRange}</if>
+            <if test="ptzTiltpos != null "> and camera.ptz_tiltpos = #{ptzTiltpos}</if>
+            <if test="ptzPanpos != null "> and camera.ptz_panpos = #{ptzPanpos}</if>
+            <if test="ptzZoompos != null "> and camera.ptz_zoompos = #{ptzZoompos}</if>
+            <if test="ptzAngle != null "> and camera.ptz_angle = #{ptzAngle}</if>
+            <if test="lon != null "> and camera.lon = #{lon}</if>
+            <if test="lat != null "> and camera.lat = #{lat}</if>
+            <if test="height != null "> and camera.height = #{height}</if>
+            <if test="altitude != null "> and camera.altitude = #{altitude}</if>
+            <if test="description != null  and description != ''"> and camera.description = #{description}</if>
+            <if test="notes != null  and notes != ''"> and camera.notes = #{notes}</if>
+            <if test="status != null "> and camera.status = #{status}</if>
+            <if test="alertRegions != null "> and camera.alert_regions = #{alertRegions}</if>
+            <if test="cableId != null "> and camera.cable_id = #{cableId}</if>
+            <if test="jslGuid != null  and jslGuid != ''"> and jsl_guid = #{jslGuid}</if>
+            <if test="jslClientSecret != null  and jslClientSecret != ''"> and jsl_client_secret = #{jslClientSecret}</if>
+            <if test="jslClientId != null  and jslClientId != ''"> and jsl_client_id = #{jslClientId}</if>
+            <if test="jslUsername != null  and jslUsername != ''"> and jsl_username like concat('%', #{jslUsername}, '%')</if>
+            <if test="jslPassword != null  and jslPassword != ''"> and jsl_password = #{jslPassword}</if>
+        </where>
+    </select>
+
+    <select id="selectBizCameraById" parameterType="Long" resultMap="BizCameraResult">
+        <include refid="selectBizCameraVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectDetailById" parameterType="java.lang.Long" resultType="cn.yhjz.biz.vo.BizCameraVo">
+        select camera.id, camera.device_id, camera.device_model, camera.network_area, camera.device_ip, camera.user_name, camera.password, camera.port, camera.channel, camera.arrow, camera.vertical, camera.level, camera.view_angle, camera.view_range, camera.ptz_tiltpos, camera.ptz_panpos, camera.ptz_zoompos, camera.ptz_angle, camera.lon, camera.lat, camera.height, camera.altitude, camera.description, camera.notes, camera.status, camera.create_by, camera.create_time, camera.update_by, camera.update_time,camera.alert_regions,camera.cable_id,
+               camera.jsl_guid, camera.jsl_client_secret, camera.jsl_client_id, camera.jsl_username, camera.jsl_password ,camera.jsl_rtsp,
+               c.cable_name as cable_name
+        from biz_camera camera
+                left join biz_cable  c on c.id= camera.cable_id
+        where camera.id = #{id}
+    </select>
+
+    <insert id="insertBizCamera" parameterType="cn.yhjz.biz.domain.BizCamera" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_camera
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null">device_id,</if>
+            <if test="deviceModel != null">device_model,</if>
+            <if test="networkArea != null">network_area,</if>
+            <if test="deviceIp != null">device_ip,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="password != null">password,</if>
+            <if test="port != null">port,</if>
+            <if test="channel != null">channel,</if>
+            <if test="arrow != null">arrow,</if>
+            <if test="vertical != null">vertical,</if>
+            <if test="level != null">level,</if>
+            <if test="viewAngle != null">view_angle,</if>
+            <if test="viewRange != null">view_range,</if>
+            <if test="ptzTiltpos != null">ptz_tiltpos,</if>
+            <if test="ptzPanpos != null">ptz_panpos,</if>
+            <if test="ptzZoompos != null">ptz_zoompos,</if>
+            <if test="ptzAngle != null">ptz_angle,</if>
+            <if test="lon != null">lon,</if>
+            <if test="lat != null">lat,</if>
+            <if test="height != null">height,</if>
+            <if test="altitude != null">altitude,</if>
+            <if test="description != null">description,</if>
+            <if test="notes != null">notes,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="alertRegions != null">alert_regions,</if>
+            <if test="cableId != null">cable_id,</if>
+            <if test="jslGuid != null">jsl_guid,</if>
+            <if test="jslClientSecret != null">jsl_client_secret,</if>
+            <if test="jslClientId != null">jsl_client_id,</if>
+            <if test="jslUsername != null">jsl_username,</if>
+            <if test="jslPassword != null">jsl_password,</if>
+            <if test="jslRtsp != null">jsl_rtsp,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="deviceModel != null">#{deviceModel},</if>
+            <if test="networkArea != null">#{networkArea},</if>
+            <if test="deviceIp != null">#{deviceIp},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="password != null">#{password},</if>
+            <if test="port != null">#{port},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="arrow != null">#{arrow},</if>
+            <if test="vertical != null">#{vertical},</if>
+            <if test="level != null">#{level},</if>
+            <if test="viewAngle != null">#{viewAngle},</if>
+            <if test="viewRange != null">#{viewRange},</if>
+            <if test="ptzTiltpos != null">#{ptzTiltpos},</if>
+            <if test="ptzPanpos != null">#{ptzPanpos},</if>
+            <if test="ptzZoompos != null">#{ptzZoompos},</if>
+            <if test="ptzAngle != null">#{ptzAngle},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="height != null">#{height},</if>
+            <if test="altitude != null">#{altitude},</if>
+            <if test="description != null">#{description},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="alertRegions != null">#{alertRegions},</if>
+            <if test="cableId != null">#{cableId},</if>
+            <if test="jslGuid != null">#{jslGuid},</if>
+            <if test="jslClientSecret != null">#{jslClientSecret},</if>
+            <if test="jslClientId != null">#{jslClientId},</if>
+            <if test="jslUsername != null">#{jslUsername},</if>
+            <if test="jslPassword != null">#{jslPassword},</if>
+            <if test="jslRtsp != null">#{jslRtsp},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBizCamera" parameterType="cn.yhjz.biz.domain.BizCamera">
+        update biz_camera
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="deviceModel != null">device_model = #{deviceModel},</if>
+            <if test="networkArea != null">network_area = #{networkArea},</if>
+            <if test="deviceIp != null">device_ip = #{deviceIp},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="port != null">port = #{port},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="arrow != null">arrow = #{arrow},</if>
+            <if test="vertical != null">vertical = #{vertical},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="viewAngle != null">view_angle = #{viewAngle},</if>
+            <if test="viewRange != null">view_range = #{viewRange},</if>
+            <if test="ptzTiltpos != null">ptz_tiltpos = #{ptzTiltpos},</if>
+            <if test="ptzPanpos != null">ptz_panpos = #{ptzPanpos},</if>
+            <if test="ptzZoompos != null">ptz_zoompos = #{ptzZoompos},</if>
+            <if test="ptzAngle != null">ptz_angle = #{ptzAngle},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="altitude != null">altitude = #{altitude},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="alertRegions != null "> alert_regions = #{alertRegions},</if>
+            <if test="cableId != null "> cable_id = #{cableId},</if>
+            <if test="jslGuid != null">jsl_guid = #{jslGuid},</if>
+            <if test="jslClientSecret != null">jsl_client_secret = #{jslClientSecret},</if>
+            <if test="jslClientId != null">jsl_client_id = #{jslClientId},</if>
+            <if test="jslUsername != null">jsl_username = #{jslUsername},</if>
+            <if test="jslPassword != null">jsl_password = #{jslPassword},</if>
+            <if test="jslRtsp != null">jsl_rtsp = #{jslRtsp},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateBizCameraPTZ" parameterType="cn.yhjz.biz.domain.BizCamera">
+        update biz_camera
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ptzTiltpos != null">ptz_tiltpos = #{ptzTiltpos},</if>
+            <if test="ptzPanpos != null">ptz_panpos = #{ptzPanpos},</if>
+            <if test="ptzZoompos != null">ptz_zoompos = #{ptzZoompos},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteBizCameraById" parameterType="Long">
+        delete from biz_camera where id = #{id}
+    </delete>
+
+    <delete id="deleteBizCameraByIds" parameterType="String">
+        delete from biz_camera where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectBizCameraByDeviceId" parameterType="java.lang.String" resultMap="BizCameraResult">
+        <include refid="selectBizCameraVo"/>
+        where device_id = #{deviceId}
+    </select>
+</mapper>

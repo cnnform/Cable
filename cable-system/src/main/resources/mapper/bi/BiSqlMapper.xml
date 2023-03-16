@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.bi.mapper.BiSqlMapper">
+    
+    <resultMap type="BiSql" id="BiSqlResult">
+        <result property="bsId"    column="bs_id"    />
+        <result property="dsId"    column="ds_id"    />
+        <result property="bsName"  column="bs_name"   />
+        <result property="dsName"  column="ds_name"   />
+        <result property="bsDynSql"    column="bs_dyn_sql"    />
+        <result property="bsNotes" column="bs_notes"    />
+        <result property="isList"    column="is_list"    />
+        <result property="isPage"    column="is_page"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBiSqlVo">
+        select bs.bs_id, bs.ds_id, bs.bs_name, bd.ds_name, bs.bs_dyn_sql, bs.bs_notes, bs.is_list, bs.is_page, bs.create_time, bs.update_time from bi_sql bs left join bi_ds bd on bs.ds_id = bd.ds_id
+    </sql>
+
+    <select id="selectBiSqlList" parameterType="BiSql" resultMap="BiSqlResult">
+        <include refid="selectBiSqlVo"/>
+        <where>  
+            <if test="dsId != null "> and bs.ds_id = #{dsId}</if>
+            <if test="bsName != null and bsName != ''"> and bs.bs_name like concat('%', #{bsName}, '%')</if>
+            <if test="dsName != null and dsName != ''"> and bd.ds_name like concat('%', #{dsName}, '%')</if>
+            <if test="bsDynSql != null and bsDynSql != ''"> and bs.bs_dyn_sql = #{bsDynSql}</if>
+            <if test="bsNotes != null and bsNotes != ''"> and bs.bs_notes like concat('%', #{bsNotes}, '%')</if>
+            <if test="isList != null "> and bs.is_list = #{isList}</if>
+            <if test="isPage != null "> and bs.is_page = #{isPage}</if>
+        </where>
+    </select>
+    
+    <select id="selectBiSqlByBsId" parameterType="Long" resultMap="BiSqlResult">
+        <include refid="selectBiSqlVo"/>
+        where bs.bs_id = #{bsId}
+    </select>
+        
+    <insert id="insertBiSql" parameterType="BiSql" useGeneratedKeys="true" keyProperty="bsId">
+        insert into bi_sql
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dsId != null">ds_id,</if>
+            <if test="bsName != null">bs_name,</if>
+            <if test="bsDynSql != null">bs_dyn_sql,</if>
+            <if test="bsNotes != null">bs_notes,</if>
+            <if test="isList != null">is_list,</if>
+            <if test="isPage != null">is_page,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dsId != null">#{dsId},</if>
+            <if test="bsName != null">#{bsName},</if>
+            <if test="bsDynSql != null">#{bsDynSql},</if>
+            <if test="bsNotes != null">#{bsNotes},</if>
+            <if test="isList != null">#{isList},</if>
+            <if test="isPage != null">#{isPage},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBiSql" parameterType="BiSql">
+        update bi_sql
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dsId != null">ds_id = #{dsId},</if>
+            <if test="bsName != null">bs_name = #{bsName},</if>
+            <if test="bsDynSql != null">bs_dyn_sql = #{bsDynSql},</if>
+            <if test="bsNotes != null">bs_notes = #{bsNotes},</if>
+            <if test="isList != null">is_list = #{isList},</if>
+            <if test="isPage != null">is_page = #{isPage},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where bs_id = #{bsId}
+    </update>
+
+    <delete id="deleteBiSqlByDsIds" parameterType="String">
+        delete from bi_sql where ds_id in
+        <foreach item="dsId" collection="array" open="(" separator="," close=")">
+            #{dsId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBiSqlByBsIds" parameterType="String">
+        delete from bi_sql where bs_id in 
+        <foreach item="bsId" collection="array" open="(" separator="," close=")">
+            #{bsId}
+        </foreach>
+    </delete>
+</mapper>

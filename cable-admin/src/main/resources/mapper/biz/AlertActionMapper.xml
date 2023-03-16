@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.AlertActionMapper">
+    
+    <resultMap type="AlertAction" id="AlertActionResult">
+        <result property="id"    column="id"    />
+        <result property="actionName"    column="action_name"    />
+        <result property="actionCode"    column="action_code"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAlertActionVo">
+        select id, action_name, action_code, create_by, create_time, update_by, update_time from alert_action
+    </sql>
+
+    <select id="selectAlertActionList" parameterType="AlertAction" resultMap="AlertActionResult">
+        <include refid="selectAlertActionVo"/>
+        <where>  
+            <if test="actionName != null  and actionName != ''"> and action_name like concat('%', #{actionName}, '%')</if>
+            <if test="actionCode != null  and actionCode != ''"> and action_code = #{actionCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlertActionById" parameterType="Long" resultMap="AlertActionResult">
+        <include refid="selectAlertActionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlertAction" parameterType="AlertAction" useGeneratedKeys="true" keyProperty="id">
+        insert into alert_action
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="actionName != null and actionName != ''">action_name,</if>
+            <if test="actionCode != null and actionCode != ''">action_code,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="actionName != null and actionName != ''">#{actionName},</if>
+            <if test="actionCode != null and actionCode != ''">#{actionCode},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlertAction" parameterType="AlertAction">
+        update alert_action
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="actionName != null and actionName != ''">action_name = #{actionName},</if>
+            <if test="actionCode != null and actionCode != ''">action_code = #{actionCode},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlertActionById" parameterType="Long">
+        delete from alert_action where id = #{id}
+    </delete>
+
+    <delete id="deleteAlertActionByIds" parameterType="String">
+        delete from alert_action where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

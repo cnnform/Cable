@@ -1,0 +1,12 @@
+package rules;
+
+import cn.yhjz.biz.domain.AlertRuleEntity;
+
+
+//5m之内报警
+rule "distance" //名称需唯一
+when
+$entity:AlertRuleEntity(distance <  5 && targetType=="wjj" && behavior=="dig");
+then
+$entity.setResult(true);
+end

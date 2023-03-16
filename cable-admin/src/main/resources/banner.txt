@@ -1,0 +1,2 @@
+Application Version: ${yhjz.version}
+Spring Boot Version: ${spring-boot.version}

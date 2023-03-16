@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.BizCableMapper">
+
+    <resultMap type="BizCable" id="BizCableResult">
+        <result property="id"    column="id"    />
+        <result property="cableName"    column="cable_name"    />
+        <result property="cableDesc"    column="cable_desc"    />
+        <result property="cableLines"    column="cable_lines"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="directId"    column="direct_id"    />
+        <result property="stationId"    column="station_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="chargeManId"    column="charge_man_id"    />
+    </resultMap>
+
+    <sql id="selectBizCableVo">
+        select id, cable_name, cable_desc, cable_lines, create_by, create_time, update_by, update_time, direct_id, station_id, class_id, charge_man_id from biz_cable
+    </sql>
+
+    <!--查找目标部门，角色为线路负责人的用户-->
+    <select id="selectChargeByClass" resultType="cn.yhjz.common.core.domain.entity.SysUser">
+    select u.user_id,u.user_name,u.nick_name from sys_user u
+    INNER JOIN sys_user_role ur on ur.user_id =u.user_id
+    INNER JOIN sys_role r on r.role_id = ur.role_id and r.role_key = 'incharge'
+    where u.dept_id = #{classId}
+    </select>
+
+    <select id="selectBizCableList" parameterType="BizCable" resultType="cn.yhjz.biz.vo.BizCableVo">
+        select t.id, t.cable_name, t.cable_desc, t.cable_lines, t.create_by, t.create_time,
+               t.update_by, t.update_time, t.direct_id, t.station_id, t.class_id, t.charge_man_id,
+               dd.dept_name as direct_name,
+               ds.dept_name as station_name,
+               dc.dept_name as class_name,
+               u.nick_name as incharge_name
+        from biz_cable t
+        left join sys_dept dd on dd.dept_id = t.direct_id
+        left join sys_dept ds on ds.dept_id = t.station_id
+        left join sys_dept dc on dc.dept_id = t.class_id
+        left join sys_user u on u.user_id = t.charge_man_id
+        <where>
+            <if test="id != null"> and t.id = #{id}</if>
+            <if test="cableName != null  and cableName != ''"> and cable_name like concat('%', #{cableName}, '%')</if>
+            <if test="cableDesc != null  and cableDesc != ''"> and cable_desc = #{cableDesc}</if>
+            <if test="cableLines != null  and cableLines != ''"> and cable_lines = #{cableLines}</if>
+            <if test="directId != null "> and direct_id = #{directId}</if>
+            <if test="stationId != null "> and station_id = #{stationId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="chargeManId != null "> and charge_man_id = #{chargeManId}</if>
+        </where>
+    </select>
+
+    <select id="selectBizCableById" parameterType="Long" resultMap="BizCableResult">
+        <include refid="selectBizCableVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBizCable" parameterType="BizCable" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_cable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cableName != null">cable_name,</if>
+            <if test="cableDesc != null">cable_desc,</if>
+            <if test="cableLines != null">cable_lines,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="directId != null">direct_id,</if>
+            <if test="stationId != null">station_id,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="chargeManId != null">charge_man_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cableName != null">#{cableName},</if>
+            <if test="cableDesc != null">#{cableDesc},</if>
+            <if test="cableLines != null">#{cableLines},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="directId != null">#{directId},</if>
+            <if test="stationId != null">#{stationId},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="chargeManId != null">#{chargeManId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCable" parameterType="BizCable">
+        update biz_cable
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cableName != null">cable_name = #{cableName},</if>
+            <if test="cableDesc != null">cable_desc = #{cableDesc},</if>
+            <if test="cableLines != null">cable_lines = #{cableLines},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="directId != null">direct_id = #{directId},</if>
+            <if test="stationId != null">station_id = #{stationId},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="chargeManId != null">charge_man_id = #{chargeManId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizCableById" parameterType="Long">
+        delete from biz_cable where id = #{id}
+    </delete>
+
+    <delete id="deleteBizCableByIds" parameterType="String">
+        delete from biz_cable where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--查找一个线路的责任人-->
+    <select id="selectInchargeByCableId" resultType="cn.yhjz.common.core.domain.entity.SysUser">
+        select u.phonenumber,u.email from biz_cable c
+        inner join  sys_user u on u.user_id = c.charge_man_id
+        where c.id = #{cableId};
+    </select>
+</mapper>

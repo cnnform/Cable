@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.AlertLevelMapper">
+    
+    <resultMap type="AlertLevel" id="AlertLevelResult">
+        <result property="id"    column="id"    />
+        <result property="levelName"    column="level_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAlertLevelVo">
+        select id, level_name, create_by, create_time, update_by, update_time from alert_level
+    </sql>
+
+    <select id="selectAlertLevelList" parameterType="AlertLevel" resultMap="AlertLevelResult">
+        <include refid="selectAlertLevelVo"/>
+        <where>  
+            <if test="levelName != null  and levelName != ''"> and level_name like concat('%', #{levelName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAlertLevelById" parameterType="Long" resultMap="AlertLevelResult">
+        <include refid="selectAlertLevelVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlertLevel" parameterType="AlertLevel" useGeneratedKeys="true" keyProperty="id">
+        insert into alert_level
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="levelName != null and levelName != ''">level_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="levelName != null and levelName != ''">#{levelName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlertLevel" parameterType="AlertLevel">
+        update alert_level
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="levelName != null and levelName != ''">level_name = #{levelName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlertLevelById" parameterType="Long">
+        delete from alert_level where id = #{id}
+    </delete>
+
+    <delete id="deleteAlertLevelByIds" parameterType="String">
+        delete from alert_level where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

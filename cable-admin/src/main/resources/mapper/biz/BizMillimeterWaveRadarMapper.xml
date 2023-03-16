@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.BizMillimeterWaveRadarMapper">
+    
+    <resultMap type="BizMillimeterWaveRadar" id="BizMillimeterWaveRadarResult">
+        <result property="id"    column="id"    />
+        <result property="deviceId"    column="device_id"    />
+        <result property="deviceModel"    column="device_model"    />
+        <result property="networkArea"    column="network_area"    />
+        <result property="deviceIp"    column="device_ip"    />
+        <result property="lon"    column="lon"    />
+        <result property="userName"    column="user_name"    />
+        <result property="lat"    column="lat"    />
+        <result property="password"    column="password"    />
+        <result property="height"    column="height"    />
+        <result property="port"    column="port"    />
+        <result property="altitude"    column="altitude"    />
+        <result property="channel"    column="channel"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="arrow"    column="arrow"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="vertical"    column="vertical"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="level"    column="level"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="viewAngle"    column="view_angle"    />
+        <result property="viewRange"    column="view_range"    />
+        <result property="ptzTiltpos"    column="ptz_tiltpos"    />
+        <result property="ptzPanpos"    column="ptz_panpos"    />
+        <result property="ptzZoompos"    column="ptz_zoompos"    />
+        <result property="ptzAngle"    column="ptz_angle"    />
+        <result property="description"    column="description"    />
+        <result property="notes"    column="notes"    />
+        <result property="status"    column="status"    />
+        <result property="alertRegions"    column="alert_regions"    />
+        <result property="cableId"    column="cable_id"    />
+    </resultMap>
+
+    <sql id="selectBizMillimeterWaveRadarVo">
+        select id, device_id, device_model, network_area, device_ip, lon, user_name, lat, password, height, port, altitude, channel, create_by, arrow, create_time, vertical, update_by, level, update_time, view_angle, view_range, ptz_tiltpos, ptz_panpos, ptz_zoompos, ptz_angle, description, notes, status, alert_regions, cable_id from biz_millimeter_wave_radar
+    </sql>
+
+    <select id="selectBizMillimeterWaveRadarList" parameterType="BizMillimeterWaveRadar" resultMap="BizMillimeterWaveRadarResult">
+        <include refid="selectBizMillimeterWaveRadarVo"/>
+        <where>  
+            <if test="deviceId != null  and deviceId != ''"> and device_id = #{deviceId}</if>
+            <if test="deviceModel != null  and deviceModel != ''"> and device_model = #{deviceModel}</if>
+            <if test="networkArea != null  and networkArea != ''"> and network_area = #{networkArea}</if>
+            <if test="deviceIp != null  and deviceIp != ''"> and device_ip = #{deviceIp}</if>
+            <if test="lon != null "> and lon = #{lon}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="lat != null "> and lat = #{lat}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="height != null "> and height = #{height}</if>
+            <if test="port != null  and port != ''"> and port = #{port}</if>
+            <if test="altitude != null "> and altitude = #{altitude}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+            <if test="arrow != null "> and arrow = #{arrow}</if>
+            <if test="vertical != null "> and vertical = #{vertical}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="viewAngle != null "> and view_angle = #{viewAngle}</if>
+            <if test="viewRange != null "> and view_range = #{viewRange}</if>
+            <if test="ptzTiltpos != null "> and ptz_tiltpos = #{ptzTiltpos}</if>
+            <if test="ptzPanpos != null "> and ptz_panpos = #{ptzPanpos}</if>
+            <if test="ptzZoompos != null "> and ptz_zoompos = #{ptzZoompos}</if>
+            <if test="ptzAngle != null "> and ptz_angle = #{ptzAngle}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="notes != null  and notes != ''"> and notes = #{notes}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="alertRegions != null  and alertRegions != ''"> and alert_regions = #{alertRegions}</if>
+            <if test="cableId != null "> and cable_id = #{cableId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizMillimeterWaveRadarById" parameterType="Long" resultMap="BizMillimeterWaveRadarResult">
+        <include refid="selectBizMillimeterWaveRadarVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizMillimeterWaveRadar" parameterType="BizMillimeterWaveRadar">
+        insert into biz_millimeter_wave_radar
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="deviceModel != null">device_model,</if>
+            <if test="networkArea != null">network_area,</if>
+            <if test="deviceIp != null">device_ip,</if>
+            <if test="lon != null">lon,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="lat != null">lat,</if>
+            <if test="password != null">password,</if>
+            <if test="height != null">height,</if>
+            <if test="port != null">port,</if>
+            <if test="altitude != null">altitude,</if>
+            <if test="channel != null">channel,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="arrow != null">arrow,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="vertical != null">vertical,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="level != null">level,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="viewAngle != null">view_angle,</if>
+            <if test="viewRange != null">view_range,</if>
+            <if test="ptzTiltpos != null">ptz_tiltpos,</if>
+            <if test="ptzPanpos != null">ptz_panpos,</if>
+            <if test="ptzZoompos != null">ptz_zoompos,</if>
+            <if test="ptzAngle != null">ptz_angle,</if>
+            <if test="description != null">description,</if>
+            <if test="notes != null">notes,</if>
+            <if test="status != null">status,</if>
+            <if test="alertRegions != null">alert_regions,</if>
+            <if test="cableId != null">cable_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="deviceModel != null">#{deviceModel},</if>
+            <if test="networkArea != null">#{networkArea},</if>
+            <if test="deviceIp != null">#{deviceIp},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="password != null">#{password},</if>
+            <if test="height != null">#{height},</if>
+            <if test="port != null">#{port},</if>
+            <if test="altitude != null">#{altitude},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="arrow != null">#{arrow},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="vertical != null">#{vertical},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="level != null">#{level},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="viewAngle != null">#{viewAngle},</if>
+            <if test="viewRange != null">#{viewRange},</if>
+            <if test="ptzTiltpos != null">#{ptzTiltpos},</if>
+            <if test="ptzPanpos != null">#{ptzPanpos},</if>
+            <if test="ptzZoompos != null">#{ptzZoompos},</if>
+            <if test="ptzAngle != null">#{ptzAngle},</if>
+            <if test="description != null">#{description},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="status != null">#{status},</if>
+            <if test="alertRegions != null">#{alertRegions},</if>
+            <if test="cableId != null">#{cableId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizMillimeterWaveRadar" parameterType="BizMillimeterWaveRadar">
+        update biz_millimeter_wave_radar
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="deviceModel != null">device_model = #{deviceModel},</if>
+            <if test="networkArea != null">network_area = #{networkArea},</if>
+            <if test="deviceIp != null">device_ip = #{deviceIp},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="port != null">port = #{port},</if>
+            <if test="altitude != null">altitude = #{altitude},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="arrow != null">arrow = #{arrow},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="vertical != null">vertical = #{vertical},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="viewAngle != null">view_angle = #{viewAngle},</if>
+            <if test="viewRange != null">view_range = #{viewRange},</if>
+            <if test="ptzTiltpos != null">ptz_tiltpos = #{ptzTiltpos},</if>
+            <if test="ptzPanpos != null">ptz_panpos = #{ptzPanpos},</if>
+            <if test="ptzZoompos != null">ptz_zoompos = #{ptzZoompos},</if>
+            <if test="ptzAngle != null">ptz_angle = #{ptzAngle},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="alertRegions != null">alert_regions = #{alertRegions},</if>
+            <if test="cableId != null">cable_id = #{cableId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizMillimeterWaveRadarById" parameterType="Long">
+        delete from biz_millimeter_wave_radar where id = #{id}
+    </delete>
+
+    <delete id="deleteBizMillimeterWaveRadarByIds" parameterType="String">
+        delete from biz_millimeter_wave_radar where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

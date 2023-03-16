@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.bi.mapper.BiPainterManagerMapper">
+    
+    <resultMap type="BiPainterManager" id="BiPainterManagerResult">
+        <result property="pmId"    column="pm_id"    />
+        <result property="pmCode"    column="pm_code"    />
+        <result property="pmName"    column="pm_name"    />
+        <result property="pmDesc"    column="pm_desc"    />
+        <result property="pmOptions"    column="pm_options"    />
+        <result property="pmStatus"    column="pm_status"    />
+        <result property="status"    column="status"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBiPainterManagerVo">
+        select pm_id, pm_code, pm_desc, pm_name, pm_options, pm_status, status, create_user, create_time, update_user, update_time from bi_painter_manager
+    </sql>
+
+    <select id="selectBiPainterManagerList" parameterType="BiPainterManager" resultMap="BiPainterManagerResult">
+        <include refid="selectBiPainterManagerVo"/>
+        <where>  
+            <if test="pmCode != null  and pmCode != ''"> and pm_code = #{pmCode}</if>
+            <if test="pmName != null  and pmName != ''"> and pm_name like concat('%', #{pmName}, '%')</if>
+            <if test="pmDesc != null  and pmDesc != ''"> and pm_desc like concat('%', #{pmDesc}, '%')</if>
+            <if test="pmOptions != null  and pmOptions != ''"> and pm_options = #{pmOptions}</if>
+            <if test="pmStatus != null "> and pm_status = #{pmStatus}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and update_user = #{updateUser}</if>
+        </where>
+    </select>
+    
+    <select id="selectBiPainterManagerByPmId" parameterType="Long" resultMap="BiPainterManagerResult">
+        <include refid="selectBiPainterManagerVo"/>
+        where pm_id = #{pmId}
+    </select>
+        
+    <insert id="insertBiPainterManager" parameterType="BiPainterManager" useGeneratedKeys="true" keyProperty="pmId">
+        insert into bi_painter_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pmCode != null and pmCode != ''">pm_code,</if>
+            <if test="pmName != null">pm_name,</if>
+            <if test="pmDesc != null">pm_desc,</if>
+            <if test="pmOptions != null">pm_options,</if>
+            <if test="pmStatus != null">pm_status,</if>
+            <if test="status != null">status,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pmCode != null and pmCode != ''">#{pmCode},</if>
+            <if test="pmName != null">#{pmName},</if>
+            <if test="pmDesc != null">#{pmDesc},</if>
+            <if test="pmOptions != null">#{pmOptions},</if>
+            <if test="pmStatus != null">#{pmStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBiPainterManager" parameterType="BiPainterManager">
+        update bi_painter_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pmCode != null and pmCode != ''">pm_code = #{pmCode},</if>
+            <if test="pmName != null">pm_name = #{pmName},</if>
+            <if test="pmDesc != null">pm_desc = #{pmDesc},</if>
+            <if test="pmOptions != null">pm_options = #{pmOptions},</if>
+            <if test="pmStatus != null">pm_status = #{pmStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where pm_id = #{pmId}
+    </update>
+
+    <delete id="deleteBiPainterManagerByPmId" parameterType="Long">
+        delete from bi_painter_manager where pm_id = #{pmId}
+    </delete>
+
+    <delete id="deleteBiPainterManagerByPmIds" parameterType="String">
+        delete from bi_painter_manager where pm_id in 
+        <foreach item="pmId" collection="array" open="(" separator="," close=")">
+            #{pmId}
+        </foreach>
+    </delete>
+</mapper>

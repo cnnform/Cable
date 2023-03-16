@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.bi.mapper.BiReportManagerMapper">
+
+    <resultMap type="BiReportManager" id="BiReportManagerResult">
+        <result property="rmId"    column="rm_id"    />
+        <result property="rmCode"    column="rm_code"    />
+        <result property="rmName" column="rm_name" />
+        <result property="rmDesc"    column="rm_desc"    />
+        <result property="bsId"    column="bs_id"    />
+        <result property="bsName" column="bs_name" />
+        <result property="rmType"    column="rm_type"    />
+        <result property="configOption"    column="config_option"    />
+        <result property="status"    column="status"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBiReportManagerVo">
+        select rm.rm_id, rm.rm_code, rm.rm_name, rm.rm_desc, rm.bs_id, bs.bs_name, rm.rm_type, rm.config_option, rm.status, rm.create_user, rm.create_time, rm.update_user, rm.update_time from bi_report_manager rm left join bi_sql bs on rm.bs_id = bs.bs_id
+    </sql>
+
+    <select id="selectBiReportManagerList" parameterType="BiReportManager" resultMap="BiReportManagerResult">
+        <include refid="selectBiReportManagerVo"/>
+        <where>
+            <if test="rmCode != null  and rmCode != ''"> and rm.rm_code = #{rmCode}</if>
+            <if test="rmName != null  and rmName != ''"> and rm.rm_name like concat('%', #{rmName}, '%')</if>
+            <if test="rmDesc != null  and rmDesc != ''"> and rm.rm_desc = #{rmDesc}</if>
+            <if test="bsId != null "> and rm.bs_id = #{bsId}</if>
+            <if test="bsName != null  and bsName != ''"> and bs.bs_name like concat('%', #{bsName}, '%')</if>
+            <if test="rmType != null  and rmType != ''"> and rm.rm_type = #{rmType}</if>
+            <if test="configOption != null  and configOption != ''"> and rm.config_option = #{configOption}</if>
+            <if test="status != null "> and rm.status = #{status}</if>
+            <if test="createUser != null  and createUser != ''"> and rm.create_user = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and rm.update_user = #{updateUser}</if>
+        </where>
+    </select>
+
+    <select id="selectBiReportManagerByRmId" parameterType="Long" resultMap="BiReportManagerResult">
+        <include refid="selectBiReportManagerVo"/>
+        where rm_id = #{rmId}
+    </select>
+
+    <insert id="insertBiReportManager" parameterType="BiReportManager">
+        insert into bi_report_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rmId != null">rm_id,</if>
+            <if test="rmCode != null and rmCode != ''">rm_code,</if>
+            <if test="rmName != null and rmName != ''">rm_name,</if>
+            <if test="rmDesc != null">rm_desc,</if>
+            <if test="bsId != null">bs_id,</if>
+            <if test="rmType != null">rm_type,</if>
+            <if test="configOption != null">config_option,</if>
+            <if test="status != null">status,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rmId != null">#{rmId},</if>
+            <if test="rmCode != null and rmCode != ''">#{rmCode},</if>
+            <if test="rmName != null and rmName != ''">#{rmName},</if>
+            <if test="rmDesc != null">#{rmDesc},</if>
+            <if test="bsId != null">#{bsId},</if>
+            <if test="rmType != null">#{rmType},</if>
+            <if test="configOption != null">#{configOption},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBiReportManager" parameterType="BiReportManager">
+        update bi_report_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rmCode != null and rmCode != ''">rm_code = #{rmCode},</if>
+            <if test="rmName != null and rmName != ''">rm_name = #{rmName},</if>
+            <if test="rmDesc != null">rm_desc = #{rmDesc},</if>
+            <if test="bsId != null">bs_id = #{bsId},</if>
+            <if test="rmType != null">rm_type = #{rmType},</if>
+            <if test="configOption != null">config_option = #{configOption},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where rm_id = #{rmId}
+    </update>
+
+    <delete id="deleteBiReportManagerByRmId" parameterType="Long">
+        delete from bi_report_manager where rm_id = #{rmId}
+    </delete>
+
+    <delete id="deleteBiReportManagerByRmIds" parameterType="String">
+        delete from bi_report_manager where rm_id in
+        <foreach item="rmId" collection="array" open="(" separator="," close=")">
+            #{rmId}
+        </foreach>
+    </delete>
+</mapper>

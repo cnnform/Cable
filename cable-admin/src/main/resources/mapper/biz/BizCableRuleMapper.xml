@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.BizCableRuleMapper">
+    
+    <resultMap type="BizCableRule" id="BizCableRuleResult">
+        <result property="id"    column="id"    />
+        <result property="cableId"    column="cable_id"    />
+        <result property="ruleCode"    column="rule_code"    />
+        <result property="levelId"    column="level_id"    />
+        <result property="levelName"    column="level_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizCableRuleVo">
+        select id, cable_id, rule_code, level_id, level_name, create_by, update_by, create_time, update_time from biz_cable_rule
+    </sql>
+
+    <select id="selectBizCableRuleList" parameterType="BizCableRule" resultMap="BizCableRuleResult">
+        <include refid="selectBizCableRuleVo"/>
+        <where>  
+            <if test="cableId != null "> and cable_id = #{cableId}</if>
+            <if test="ruleCode != null  and ruleCode != ''"> and rule_code = #{ruleCode}</if>
+            <if test="levelId != null "> and level_id = #{levelId}</if>
+            <if test="levelName != null  and levelName != ''"> and level_name like concat('%', #{levelName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBizCableRuleById" parameterType="Long" resultMap="BizCableRuleResult">
+        <include refid="selectBizCableRuleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizCableRule" parameterType="BizCableRule" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_cable_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cableId != null">cable_id,</if>
+            <if test="ruleCode != null">rule_code,</if>
+            <if test="levelId != null">level_id,</if>
+            <if test="levelName != null">level_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cableId != null">#{cableId},</if>
+            <if test="ruleCode != null">#{ruleCode},</if>
+            <if test="levelId != null">#{levelId},</if>
+            <if test="levelName != null">#{levelName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCableRule" parameterType="BizCableRule">
+        update biz_cable_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cableId != null">cable_id = #{cableId},</if>
+            <if test="ruleCode != null">rule_code = #{ruleCode},</if>
+            <if test="levelId != null">level_id = #{levelId},</if>
+            <if test="levelName != null">level_name = #{levelName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizCableRuleById" parameterType="Long">
+        delete from biz_cable_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteBizCableRuleByIds" parameterType="String">
+        delete from biz_cable_rule where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByCableId">
+        delete from biz_cable_rule where cable_id = #{cableId}
+    </delete>
+
+
+    <select id="selectBizCableRuleByCableId" parameterType="Long" resultMap="BizCableRuleResult">
+        <include refid="selectBizCableRuleVo"/>
+        where cable_id = #{cableId}
+    </select>
+</mapper>

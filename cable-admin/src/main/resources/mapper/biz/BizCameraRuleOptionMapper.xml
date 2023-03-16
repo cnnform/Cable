@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.BizCameraRuleOptionMapper">
+    
+    <resultMap type="BizCameraRuleOption" id="BizCameraRuleOptionResult">
+        <result property="id"    column="id"    />
+        <result property="refId"    column="ref_id"    />
+        <result property="actionId"    column="action_id"    />
+        <result property="attrCode"    column="attr_code"    />
+        <result property="actionCode"    column="action_code"    />
+        <result property="attrValue"    column="attr_value"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBizCameraRuleOptionVo">
+        select id, ref_id, action_id, attr_code, action_code, attr_value, create_by, update_by, create_time, update_time from biz_camera_rule_option
+    </sql>
+
+    <select id="selectBizCameraRuleOptionList" parameterType="BizCameraRuleOption" resultMap="BizCameraRuleOptionResult">
+        <include refid="selectBizCameraRuleOptionVo"/>
+        <where>  
+            <if test="actionId != null "> and action_id = #{actionId}</if>
+            <if test="actionCode != null  and actionCode != ''"> and action_code = #{actionCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizCameraRuleOptionById" parameterType="Long" resultMap="BizCameraRuleOptionResult">
+        <include refid="selectBizCameraRuleOptionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizCameraRuleOption" parameterType="BizCameraRuleOption" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_camera_rule_option
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="refId != null">ref_id,</if>
+            <if test="actionId != null">action_id,</if>
+            <if test="attrCode != null">attr_code,</if>
+            <if test="actionCode != null">action_code,</if>
+            <if test="attrValue != null">attr_value,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="refId != null">#{refId},</if>
+            <if test="actionId != null">#{actionId},</if>
+            <if test="attrCode != null">#{attrCode},</if>
+            <if test="actionCode != null">#{actionCode},</if>
+            <if test="attrValue != null">#{attrValue},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCameraRuleOption" parameterType="BizCameraRuleOption">
+        update biz_camera_rule_option
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="refId != null">ref_id = #{refId},</if>
+            <if test="actionId != null">action_id = #{actionId},</if>
+            <if test="attrCode != null">attr_code = #{attrCode},</if>
+            <if test="actionCode != null">action_code = #{actionCode},</if>
+            <if test="attrValue != null">attr_value = #{attrValue},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizCameraRuleOptionById" parameterType="Long">
+        delete from biz_camera_rule_option where id = #{id}
+    </delete>
+    <delete id="deleteByRefId" parameterType="Long">
+        delete from biz_camera_rule_option where ref_id = #{refId}
+    </delete>
+    <select id="selectBizCameraRuleOptionByRefId" parameterType="Long" resultMap="BizCameraRuleOptionResult">
+        <include refid="selectBizCameraRuleOptionVo"/>
+        where ref_id = #{refId}
+    </select>
+    <delete id="deleteBizCameraRuleOptionByIds" parameterType="String">
+        delete from biz_camera_rule_option where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

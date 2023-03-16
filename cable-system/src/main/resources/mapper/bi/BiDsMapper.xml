@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.bi.mapper.BiDsMapper">
+    
+    <resultMap type="BiDs" id="BiDsResult">
+        <result property="dsId"    column="ds_id"    />
+        <result property="dsName"    column="ds_name"    />
+        <result property="dsType"    column="ds_type"    />
+        <result property="dsIp"    column="ds_ip"    />
+        <result property="dsPort"    column="ds_port"    />
+        <result property="dsDbName"    column="ds_dbname"    />
+        <result property="dsUsername"    column="ds_username"    />
+        <result property="dsPassword"    column="ds_password"    />
+        <result property="dsCode"    column="ds_code"    />
+        <result property="dsRemark"    column="ds_remark"    />
+        <result property="dsCreateTime"    column="ds_create_time"    />
+    </resultMap>
+
+    <sql id="selectBiDsVo">
+        select ds_id, ds_name, ds_type, ds_ip, ds_port, ds_dbname, ds_username, ds_password, ds_code, ds_remark, ds_create_time from bi_ds
+    </sql>
+
+    <select id="selectBiDsList" parameterType="BiDs" resultMap="BiDsResult">
+        <include refid="selectBiDsVo"/>
+        <where>
+            <if test="dsName != null  and dsName != ''"> and ds_name like concat('%', #{dsName}, '%')</if>
+            <if test="dsType != null  and dsType != ''"> and ds_type = #{dsType}</if>
+            <if test="dsIp != null  and dsIp != ''"> and ds_ip = #{dsIp}</if>
+            <if test="dsPort != null  and dsPort != ''"> and ds_port = #{dsPort}</if>
+            <if test="dsDbName != null  and dsDbName != ''"> and ds_dbname = #{dsDbName}</if>
+            <if test="dsUsername != null  and dsUsername != ''"> and ds_username like concat('%', #{dsUsername}, '%')</if>
+            <if test="dsPassword != null  and dsPassword != ''"> and ds_password = #{dsPassword}</if>
+            <if test="dsCode != null  and dsCode != ''"> and ds_code = #{dsCode}</if>
+            <if test="dsRemark != null  and dsRemark != ''"> and ds_remark like concat('%', #{dsRemark}, '%')</if>
+            <if test="dsCreateTime != null "> and ds_create_time = #{dsCreateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBiDsByDsId" parameterType="Long" resultMap="BiDsResult">
+        <include refid="selectBiDsVo"/>
+        where ds_id = #{dsId}
+    </select>
+
+    <insert id="insertBiDs" parameterType="BiDs" useGeneratedKeys="true" keyProperty="dsId">
+        insert into bi_ds
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dsName != null">ds_name,</if>
+            <if test="dsType != null">ds_type,</if>
+            <if test="dsIp != null">ds_ip,</if>
+            <if test="dsPort != null">ds_port,</if>
+            <if test="dsDbName != null">ds_dbname,</if>
+            <if test="dsUsername != null">ds_username,</if>
+            <if test="dsPassword != null">ds_password,</if>
+            <if test="dsCode != null">ds_code,</if>
+            <if test="dsRemark != null">ds_remark,</if>
+            <if test="dsCreateTime != null">ds_create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dsName != null">#{dsName},</if>
+            <if test="dsType != null">#{dsType},</if>
+            <if test="dsIp != null">#{dsIp},</if>
+            <if test="dsPort != null">#{dsPort},</if>
+            <if test="dsDbName != null">#{dsDbName},</if>
+            <if test="dsUsername != null">#{dsUsername},</if>
+            <if test="dsPassword != null">#{dsPassword},</if>
+            <if test="dsCode != null">#{dsCode},</if>
+            <if test="dsRemark != null">#{dsRemark},</if>
+            <if test="dsCreateTime != null">#{dsCreateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBiDs" parameterType="BiDs">
+        update bi_ds
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dsName != null">ds_name = #{dsName},</if>
+            <if test="dsType != null">ds_type = #{dsType},</if>
+            <if test="dsIp != null">ds_ip = #{dsIp},</if>
+            <if test="dsPort != null">ds_port = #{dsPort},</if>
+            <if test="dsDbName != null">ds_dbname = #{dsDbName},</if>
+            <if test="dsUsername != null">ds_username = #{dsUsername},</if>
+            <if test="dsPassword != null">ds_password = #{dsPassword},</if>
+            <if test="dsCode != null">ds_code = #{dsCode},</if>
+            <if test="dsRemark != null">ds_remark = #{dsRemark},</if>
+            <if test="dsCreateTime != null">ds_create_time = #{dsCreateTime},</if>
+        </trim>
+        where ds_id = #{dsId}
+    </update>
+
+    <delete id="deleteBiDsByDsId" parameterType="Long">
+        delete from bi_ds where ds_id = #{dsId}
+    </delete>
+
+    <delete id="deleteBiDsByDsIds" parameterType="String">
+        delete from bi_ds where ds_id in
+        <foreach item="dsId" collection="array" open="(" separator="," close=")">
+            #{dsId}
+        </foreach>
+    </delete>
+</mapper>

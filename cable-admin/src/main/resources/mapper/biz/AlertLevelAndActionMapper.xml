@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.AlertLevelAndActionMapper">
+    
+    <resultMap type="AlertLevelAndAction" id="AlertLevelAndActionResult">
+        <result property="id"    column="id"    />
+        <result property="levelId"    column="level_id"    />
+        <result property="actionId"    column="action_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAlertLevelAndActionVo">
+        select id, level_id, action_id, create_by, update_by, create_time, update_time from alert_level_and_action
+    </sql>
+
+    <select id="selectAlertLevelAndActionList" parameterType="AlertLevelAndAction" resultMap="AlertLevelAndActionResult">
+        <include refid="selectAlertLevelAndActionVo"/>
+        <where>  
+            <if test="levelId != null "> and level_id = #{levelId}</if>
+            <if test="actionId != null "> and action_id = #{actionId}</if>
+        </where>
+    </select>
+    
+    <select id="selectAlertLevelAndActionById" parameterType="Long" resultMap="AlertLevelAndActionResult">
+        <include refid="selectAlertLevelAndActionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAlertLevelAndAction" parameterType="AlertLevelAndAction" useGeneratedKeys="true" keyProperty="id">
+        insert into alert_level_and_action
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="levelId != null">level_id,</if>
+            <if test="actionId != null">action_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="levelId != null">#{levelId},</if>
+            <if test="actionId != null">#{actionId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAlertLevelAndAction" parameterType="AlertLevelAndAction">
+        update alert_level_and_action
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="levelId != null">level_id = #{levelId},</if>
+            <if test="actionId != null">action_id = #{actionId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlertLevelAndActionById" parameterType="Long">
+        delete from alert_level_and_action where id = #{id}
+    </delete>
+    <delete id="deleteByLevelId" parameterType="Long">
+        delete from alert_level_and_action where level_id = #{levelId}
+    </delete>
+
+    <delete id="deleteAlertLevelAndActionByIds" parameterType="String">
+        delete from alert_level_and_action where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

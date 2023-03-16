@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yhjz.biz.mapper.RuleMainMapper">
+    
+    <resultMap type="RuleMain" id="RuleMainResult">
+        <result property="id"    column="id"    />
+        <result property="ruleCode"    column="rule_code"    />
+        <result property="ruleName"    column="rule_name"    />
+        <result property="ruleContent"    column="rule_content"    />
+        <result property="ruleDesc"    column="rule_desc"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="upateTime"    column="upate_time"    />
+    </resultMap>
+
+    <sql id="selectRuleMainVo">
+        select id, rule_code, rule_name, rule_content, rule_desc, create_by, update_by, create_time, upate_time from rule_main
+    </sql>
+
+    <select id="selectRuleMainList" parameterType="RuleMain" resultMap="RuleMainResult">
+        <include refid="selectRuleMainVo"/>
+        <where>  
+            <if test="ruleCode != null  and ruleCode != ''"> and rule_code = #{ruleCode}</if>
+            <if test="ruleName != null  and ruleName != ''"> and rule_name like concat('%', #{ruleName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectRuleMainById" parameterType="Long" resultMap="RuleMainResult">
+        <include refid="selectRuleMainVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRuleMain" parameterType="RuleMain" useGeneratedKeys="true" keyProperty="id">
+        insert into rule_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleCode != null and ruleCode != ''">rule_code,</if>
+            <if test="ruleName != null and ruleName != ''">rule_name,</if>
+            <if test="ruleContent != null">rule_content,</if>
+            <if test="ruleDesc != null">rule_desc,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="upateTime != null">upate_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleCode != null and ruleCode != ''">#{ruleCode},</if>
+            <if test="ruleName != null and ruleName != ''">#{ruleName},</if>
+            <if test="ruleContent != null">#{ruleContent},</if>
+            <if test="ruleDesc != null">#{ruleDesc},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="upateTime != null">#{upateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRuleMain" parameterType="RuleMain">
+        update rule_main
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleCode != null and ruleCode != ''">rule_code = #{ruleCode},</if>
+            <if test="ruleName != null and ruleName != ''">rule_name = #{ruleName},</if>
+            <if test="ruleContent != null">rule_content = #{ruleContent},</if>
+            <if test="ruleDesc != null">rule_desc = #{ruleDesc},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="upateTime != null">upate_time = #{upateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRuleMainById" parameterType="Long">
+        delete from rule_main where id = #{id}
+    </delete>
+
+    <delete id="deleteRuleMainByIds" parameterType="String">
+        delete from rule_main where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
